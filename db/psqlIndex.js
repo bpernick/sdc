@@ -1,4 +1,4 @@
-const {Pool, Client} = require("pg");
+const {Client} = require("pg");
 // const { db_password } = require("../config.js");
 // const db = mysql.createConnection({
 //   host: "database-1.cuyvfkjn1z4t.us-east-1.rds.amazonaws.com",
