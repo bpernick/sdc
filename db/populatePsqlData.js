@@ -3,53 +3,79 @@ const format = require('pg-format');
 const { mockData } = require("./mockData.js");
 const faker = require("faker");
 
-var insertMockListingsData = () => {
-    console.log("insert mock was called", mockData.length);
-    valuesArr = []
-    for (let j = 0; j < 100; j++){
-      for (let i = 0; i < mockData.length; i++) {
-        let listings = mockData[i];
-        let params = [
-          listings.listing_id,
-          listings.user_id,
-          listings.title,
-          listings.creation_tsz
-        ];
-        valuesArr.push(params);
+let a = 0;
+let insertThousand = () => {
+    var insertMockListingsData = () => {
+        console.log("insert mock was called", mockData.length);
+        valuesArr = []
+        for (let j = 0; j < 100; j++){
+          for (let i = 0; i < mockData.length; i++) {
+            let listings = mockData[i];
+            let params = [
+              listings.listing_id,
+              listings.user_id,
+              listings.title,
+              listings.creation_tsz
+            ];
+            valuesArr.push(params);
+          }
+        }
+        let queryStr = `INSERT INTO listings (listing_id, user_id, title, creation_tsz) VALUES %L ;`;
+        let theQuery = format(queryStr, valuesArr);
+        client.query(theQuery, (err, data) => {
+          if (err) {
+            console.log("error inserting data");
+            throw err;
+          } else {
+            console.log("successfully inserted data!");
+          }
+        });
+      };
+      insertMockListingsData();
+
+
+    const insertImageData = () => {
+      let nestedParams = [];
+      for (var k = 0; k < 100; k++){
+          for (var i = 0; i < 100; i++){
+              imgNum = faker.random.number(4);
+              for (var j = 0; j <= imgNum; j++){
+                let image_url = faker.image.imageUrl();
+                let listing_id = mockData[i].listing_id;
+                let user_id = mockData[i].user_id;
+                let params = [image_url, listing_id, user_id];
+                nestedParams.push(params);
+              }
+          }
       }
+      let queryStr = `INSERT INTO images (image_url, listing_id, user_id) VALUES %L ;`;
+      let theQuery = format(queryStr, nestedParams);
+      client.query(theQuery, (err, data) => {
+          if (err) {
+            throw "error inserting review into db";
+          }
+      });
     }
-    console.log(valuesArr)
-    let queryStr = `INSERT INTO listings (listing_id, user_id, title, creation_tsz) VALUES %L ;`;
-    let theQuery = format(queryStr, valuesArr);
-    client.query(theQuery, (err, data) => {
-      if (err) {
-        console.log("error inserting data");
-        throw err;
-      } else {
-        console.log("successfully inserted data!");
-      }
-    });
-  };
-  insertMockListingsData();
+    insertImageData();
+    a++;
+    if (a < 1000){
+      setTimeout(insertThousand, 1000);
+    }
+}
+insertThousand();
 
-
-
-  //update review count in listings
-  //update feedback
   var insertMockFeedData = () => {
     for (let j = 0; j < 100; j++){
-        let userReviewCount = faker.random.number(1,20);
-        let updateStr = `UPDATE listings SET reviews_count = ${userReviewCount} WHERE user_id = ${mockData[j]["user_id"]}`;
+        let userReviewCount = faker.random.number(19);
+        let updateStr = `UPDATE listings SET reviews_count = ${userReviewCount + 1} WHERE user_id = ${mockData[j]["user_id"]}`;
             client.query(updateStr, (err, data) => {
             if (err) {
                 console.log(err);
                 throw "error updating reviews count";
             }
             });
-            for (let i = 0; i <= j; i++){
-                if (!mockData[j]){
-                    console.log("FAIL AT", j)
-                }
+            let nestedParams = [];
+            for (let i = 0; i <= userReviewCount; i++){
                 let user_id = mockData[j]["user_id"];
                 let message = faker.lorem.paragraph();
                 let value = faker.random.number(1,5);
@@ -69,41 +95,17 @@ var insertMockListingsData = () => {
                     reviewerName,
                     reviewDate
                 ];
-                let queryStr = `INSERT INTO feedback (user_id, message, value, reviewerAvatar, reviewerName, reviewDate) VALUES ($1, $2, $3, $4, $5, $6);`;
-                client.query(queryStr, params, (err, data) => {
-                    if (err) {
-                    console.log(err);
-                    throw "error inserting review into db";
-                    }
-                });
+                nestedParams.push(params);
             }
-        }
-  }
-  insertMockFeedData()
-
-const insertImageData = () => {
-    for (var i = 0; i < 100; i++){
-        imgNum = faker.random.number(4);
-        console.log(imgNum)
-        for(var j = 0; j <= imgNum; j++){
-          let image_url = faker.image.imageUrl();
-          let listing_id = mockData[i].listing_id;
-          let user_id = mockData[i].user_id;
-          let params = [image_url, listing_id, user_id];
-          let queryStr = `INSERT INTO images (image_url, listing_id, user_id) VALUES ($1, $2, $3);`;
-          if (!listing_id) throw "listing id is null";
-          client.query(queryStr, params, (err, data) => {
-            if (err) {
+            let queryStr = `INSERT INTO feedback (user_id, message, value, reviewerAvatar, reviewerName, reviewDate) VALUES %L ;`;
+            let theQuery = format(queryStr, nestedParams);
+            client.query(theQuery, (err, data) => {
+              if (err) {
+              console.log(err);
               throw "error inserting review into db";
-            }
+              }
           });
         }
-    }
-}
-insertImageData();
-
-
-  //make random # of imgs 1-5
-  //for each image
-  //fake data about the image
-  //push it
+        console.log("ALL DONE!")
+  }
+  insertMockFeedData()
