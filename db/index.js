@@ -2,9 +2,9 @@ const mysql = require("mysql");
 const { db_password } = require("../config.js");
 
 const db = mysql.createConnection({
-  host: "database-1.cuyvfkjn1z4t.us-east-1.rds.amazonaws.com",
+  host: "localhost",
   user: "root",
-  password: `${db_password}`,
+  password: `Phs@203386`,
   database: "etsy_reviews",
   charset: "utf8mb4"
 });

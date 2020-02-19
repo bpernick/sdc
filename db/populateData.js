@@ -24,7 +24,7 @@ var insertMockListingsData = () => {
     });
   }
 };
-// insertMockListingsData();
+insertMockListingsData();
 
 var insertMockFeedData = () => {
   let j = 0;
@@ -91,7 +91,7 @@ var insertMockFeedData = () => {
   populate();
 };
 
-// insertMockFeedData();
+insertMockFeedData();
 
 const insertImageData = () => {
   let i = 0;
@@ -134,7 +134,7 @@ const insertImageData = () => {
   }
   addImages();
 };
-// insertImageData();
+insertImageData();
 
 function generateRandomReviewsCountForItem() {
   for (let i = 6; i <= 100; i++) {

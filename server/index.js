@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const PORT = 3000;
-const db = require("../db/index");
+const PORT = 3001;
+const db = require("../db/mongoIndex.js");
+// const db = require("../db/index");
 const path = require("path");
 const cors = require("cors");
 
@@ -28,7 +29,7 @@ app.get("/listings/pictures", (req, res) => {
       return res.status(404).send("error retrieving more data for listing");
     }
     res.status(200).send(data);
-  });
+  })
 });
 
 app.get("/listings/more", (req, res) => {

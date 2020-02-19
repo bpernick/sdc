@@ -42,6 +42,7 @@
     "webpack-cli": "^3.3.10"
   },
   "devDependencies": {
+    "jester-tester": "^2.0.1",
     "nodemon": "^2.0.2"
   }
 }

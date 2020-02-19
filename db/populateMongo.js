@@ -3,7 +3,7 @@ const faker = require("faker");
 const client = require('mongodb').MongoClient;
 const assert = require('assert');
 const dbName = 'etsy_reviews';
-const tableName = 'listings';
+
 // Connection URL
 const url = 'mongodb://localhost:27017';
  
@@ -16,6 +16,7 @@ client.connect(url, function(err, client) {
   const db = client.db(dbName);
   const listings = db.collection('listings');
   let a = 0;
+  let listing_id = 0;
   let insertTenThousand = () => {
     let seedArray = [];
     let userStorage = {};
@@ -51,7 +52,9 @@ client.connect(url, function(err, client) {
             for (let k = 0; k <= imgCount; k++){
                 imgs.push(faker.image.imageUrl())
             }
+            listing_id ++;
             let seed = {
+                listing_id: listing_id,
                 userId: mockData[i].user_id,
                 reviews: reviews,
                 imgUrls: imgs,
@@ -67,8 +70,9 @@ client.connect(url, function(err, client) {
     if (a < 1000){
         console.log("A IS", a);
         a++;
-        setTimeout(insertTenThousand, 600)
+        setTimeout(insertTenThousand, 500)
     }
   }
+  insertTenThousand();
   console.log("ALL DONE!")
 });

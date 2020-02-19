@@ -4,15 +4,14 @@ import axios from "axios";
 import ReviewsCarousel from "./ReviewsCarousel.jsx";
 import Star from "./Star.jsx";
 
-const baseURL =
-  "http://etsyreviews-env.rkxrh83rhs.us-east-1.elasticbeanstalk.com/";
-// const baseURL = "";
+//const baseURL = "http://etsyreviews-env.rkxrh83rhs.us-east-1.elasticbeanstalk.com/";
+const baseURL = "";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      listingId: 651186954,
+      listingId: 721236096,
       messages: [],
       reviewerAvatars: [],
       reviewerNames: [],
