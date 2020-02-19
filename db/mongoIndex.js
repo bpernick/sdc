@@ -20,17 +20,14 @@ function getReviewsForListing(listing_id, order, callback) {
     console.log("Connected successfully to server");
     const db = client.db('etsy_reviews');
     const listings = db.collection('listings');
-    return new Promise((resolve, reject) => { 
-    listings.find({listing_id : 25}).toArray((err, cursor) => {
-        if (err){
-          reject(err);
-        }
-        return resolve(cursor)
-      })
-    }).then ((data) => {
-      console.log("!", data[0])
-    })
+    listings.find({listing_id: 25}).toArray((err, results) => {
+      if (err){
+        throw err;
+      }
+      callback(null, results);
+      client.close();
   })
+})
   //     for (let i = 0; i < data.reviews.length; i++){
   //       if (i >= 4){
   //         break;
