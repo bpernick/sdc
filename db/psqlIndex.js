@@ -1,20 +1,11 @@
 const {Client} = require("pg");
-// const { db_password } = require("../config.js");
-// const db = mysql.createConnection({
-//   host: "database-1.cuyvfkjn1z4t.us-east-1.rds.amazonaws.com",
-//   user: "root",
-//   password: `${db_password}`,
-//   database: "etsy_reviews",
-//   charset: "utf8mb4"
-// });
 
-// db.connect();
 
 const client = new Client({
   host: "localhost",
   user: "postgres",
   password: `student`,
-  database: "etsy_reviews",
+  database: "etsy",
   charset: "utf8mb4",
   port: 5432,
 })

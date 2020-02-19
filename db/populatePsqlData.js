@@ -4,6 +4,8 @@ const { mockData } = require("./mockData.js");
 const faker = require("faker");
 
 let a = 0;
+let prod_listing = 0;
+let img_listing = 0;
 let insertThousand = () => {
     var insertMockListingsData = () => {
         console.log("insert mock was called", mockData.length);
@@ -11,10 +13,11 @@ let insertThousand = () => {
         for (let j = 0; j < 100; j++){
           for (let i = 0; i < mockData.length; i++) {
             let listings = mockData[i];
+            prod_listing ++;
             let params = [
-              listings.listing_id,
+              prod_listing,
               listings.user_id,
-              listings.title,
+              title = faker.commerce.productName(),
               listings.creation_tsz
             ];
             valuesArr.push(params);
@@ -39,9 +42,10 @@ let insertThousand = () => {
       for (var k = 0; k < 100; k++){
           for (var i = 0; i < 100; i++){
               imgNum = faker.random.number(4);
+              img_listing ++;
+              let listing_id = img_listing;
               for (var j = 0; j <= imgNum; j++){
                 let image_url = faker.image.imageUrl();
-                let listing_id = mockData[i].listing_id;
                 let user_id = mockData[i].user_id;
                 let params = [image_url, listing_id, user_id];
                 nestedParams.push(params);
@@ -59,7 +63,7 @@ let insertThousand = () => {
     insertImageData();
     a++;
     if (a < 1000){
-      setTimeout(insertThousand, 1000);
+      setTimeout(insertThousand, 500);
     }
 }
 insertThousand();
@@ -78,7 +82,7 @@ insertThousand();
             for (let i = 0; i <= userReviewCount; i++){
                 let user_id = mockData[j]["user_id"];
                 let message = faker.lorem.paragraph();
-                let value = faker.random.number(1,5);
+                let value = faker.random.number(5);
                 let reviewerAvatar = faker.image.avatar();
                 let reviewerName =
                     faker.name.firstName() + " " + faker.name.lastName();
