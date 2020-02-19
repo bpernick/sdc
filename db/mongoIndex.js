@@ -17,34 +17,16 @@ client.connect(url, function(err, client) {
 function getReviewsForListing(listing_id, order, callback) {
   client.connect(url, function(err, client) {
     assert.equal(null, err);
-    console.log("Connected successfully to server");
     const db = client.db('etsy_reviews');
     const listings = db.collection('listings');
-    listings.find({listing_id: 25}).toArray((err, results) => {
+    listings.find({listing_id: listing_id}).toArray((err, results) => {
       if (err){
         throw err;
       }
       callback(null, results);
       client.close();
+    })
   })
-})
-  //     for (let i = 0; i < data.reviews.length; i++){
-  //       if (i >= 4){
-  //         break;
-  //       }
-  //       let review = data.reviews[i];
-  //       review.reviews_count = data.revCount;
-  //       review.reviews_for_item = data.revsForItem;
-  //       review.image_url = data.imgUrls[0];
-  //       review.listing_id = data.listing_id;
-  //       review.title = data.title;
-  //       answer.push(review);
-  //       client.close();
-  //     }
-  //   })
-  //   answer.sort((a,b) => a.revDate > b. revDate ? 1 : -1)
-  //   callback(null, answer)
-  // })
 };
 
 function getMoreReviews(listing_id, order, callback) {
