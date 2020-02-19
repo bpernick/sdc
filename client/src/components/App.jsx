@@ -119,6 +119,7 @@ class App extends React.Component {
       .then(response => {
         const sellerPics = [];
         const sellerTitles = [];
+        console.log(response.data)
         response.data.forEach(pic => {
           sellerPics.push(pic.image_url);
           sellerTitles.push(pic.title);

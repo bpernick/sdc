@@ -24,21 +24,24 @@ app.get("/listings", (req, res) => {
   });
 });
 app.get("/listings/pictures", (req, res) => {
-  // console.log("pictures", req.query.id);
-  db.getListingPictures(req.query.id, (err, data) => {
+
+  let id = parseInt(req.query.id);
+  db.getListingPictures(id, (err, data) => {
     if (err) {
       return res.status(404).send("error retrieving more data for listing");
     }
+    data = mongoMiddleware.images(data);
     res.status(200).send(data);
   })
 });
 
 app.get("/listings/more", (req, res) => {
-  // console.log("listings more", req.query.order);
-  db.getMoreReviews(req.query.id, req.query.order, (err, data) => {
+  let id = parseInt(req.query.id);
+  db.getMoreReviews(id, req.query.order, (err, data) => {
     if (err) {
       return res.status(404).send("error retrieving more data for listing");
     }
+    data = mongoMiddleware.moreReviews(data);
     res.status(200).send(data);
   });
 });
