@@ -1,7 +1,7 @@
-const {Client} = require("pg");
+const {Pool} = require("pg");
 
 
-const client = new Client({
+const pool = new Pool({
   host: "localhost",
   user: "postgres",
   password: `student`,
@@ -9,38 +9,28 @@ const client = new Client({
   charset: "utf8mb4",
   port: 5432
 })
-client.connect()
+pool.connect()
 
 
 function getReviewsForListing(listing_id, order, callback) {
-  let qryStr = `SELECT * FROM images WHERE listing_id = 1;`
-  
-    // a.reviews_count,
-    // a.reviews_for_item,
-    // a.listing_id,
-    // a.title
-    // FROM listings a 
-    // LEFT JOIN feedback b 
-    // ON a.user_id = b.user_id
-    // ;`
-//   `SELECT 
-//   b.*, 
-//   a.reviews_count,
-//   a.reviews_for_item,
-//   c.image_url,
-//   a.listing_id,
-//   a.title
-// FROM listings a 
-// LEFT JOIN feedback b 
-//   ON a.user_id = b.user_id
-// LEFT JOIN (SELECT * FROM images WHERE listing_id = '${listing_id}' LIMIT 1) as c
-//   ON a.listing_id = c.listing_id
-// WHERE a.listing_id = '${listing_id}'
-// ORDER BY b.reviewDate ${order}
-// LIMIT 4
-// ;`;
+  let qryStr = `SELECT 
+  b.*, 
+  a.reviews_count,
+  a.reviews_for_item,
+  c.image_url,
+  a.listing_id,
+  a.title
+FROM listings a 
+LEFT JOIN feedback b 
+  ON a.user_id = b.user_id
+LEFT JOIN (SELECT * FROM images WHERE listing_id = '${listing_id}' LIMIT 1) as c
+  ON a.listing_id = c.listing_id
+WHERE a.listing_id = '${listing_id}'
+ORDER BY b.reviewDate ${order}
+LIMIT 4
+;`;
 
-client.query(qryStr, (err, data) => {
+  pool.query(qryStr, (err, data) => {
     err ? callback(err, null) : callback(null, data);
   });
 }
@@ -60,24 +50,24 @@ LEFT JOIN (SELECT * FROM images WHERE listing_id = '${listing_id}' LIMIT 1) as c
   ON a.listing_id = c.listing_id
 WHERE a.listing_id = '${listing_id}'
 ORDER BY b.reviewDate ${order}
-LIMIT 4, 16;`;
+OFFSET 4
+LIMIT 16;`;
 
-client.query(qryStr, (err, data) => {
+pool.query(qryStr, (err, data) => {
     err ? callback(err, null) : callback(null, data);
   });
 }
 
 function getListingPictures(listing_id, callback) {
   let qryStr = `SELECT 
-	a.title,
+	  a.title,
     b.image_url,
     a.user_id
 FROM listings a INNER JOIN images b
-	ON a.user_id = b.user_id
-WHERE a.user_id = (SELECT DISTINCT user_id FROM listings WHERE listing_id = '${listing_id}')
-  AND a.listing_id = '${listing_id}'
+	ON a.listing_id = b.listing_id
+WHERE a.listing_id = '${listing_id}'
 ;`;
-client.query(qryStr, (err, data) => {
+pool.query(qryStr, (err, data) => {
     err ? callback(err, null) : callback(null, data);
   });
 }
@@ -100,13 +90,13 @@ ORDER BY b.reviewDate ASC
 LIMIT 4
 ;`;
 
-client.query(qryStr, (err, data) => {
+pool.query(qryStr, (err, data) => {
     err ? callback(err, null) : callback(null, data);
   });
 }
 
 module.exports = {
-  client,
+  pool,
   getReviewsForListing,
   getMoreReviews,
   getListingPictures,

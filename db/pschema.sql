@@ -1,6 +1,5 @@
 CREATE TABLE listings (
-  id SERIAL PRIMARY KEY,
-  listing_id integer NOT NULL,
+  listing_id integer NOT NULL PRIMARY KEY,
   user_id integer NOT NULL,
   title VARCHAR(255),
   creation_tsz integer,
@@ -22,5 +21,11 @@ CREATE TABLE images (
   id SERIAL PRIMARY KEY,
   listing_id integer NOT NULL,
   image_url text,
-  user_id integer NOT NULL
+  user_id integer NOT NULL,
+  FOREIGN KEY (listing_id) REFERENCES listings(listing_id)
 );
+
+CREATE INDEX image_listing_id_index ON images (listing_id);
+CREATE INDEX listing_user_id_index ON listings (user_id);
+CREATE INDEX image_user_id_index ON images (user_id);
+CREATE INDEX feedback_user_id_index ON feedback (user_id);

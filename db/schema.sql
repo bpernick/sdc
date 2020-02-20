@@ -5,8 +5,7 @@ CREATE DATABASE etsy_reviews;
 USE etsy_reviews;
 
 CREATE TABLE listings (
-  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  listing_id INT NOT NULL,
+  listing_id INT PRIMARY KEY,
   user_id INT NOT NULL,
   title VARCHAR(255),
   creation_tsz INT,
@@ -29,7 +28,8 @@ CREATE TABLE images (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   listing_id INT NOT NULL,
   image_url text,
-  user_id INT NOT NULL
+  user_id INT NOT NULL,
+  FOREIGN KEY (listing_id) REFERENCES items(listing_id)
 );
 
 -- etsy api gives us &#39; instead of an apostrope. code below fixes this issue

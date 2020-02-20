@@ -1,4 +1,4 @@
-const { client } = require("./psqlIndex.js");
+const { pool } = require("./psqlIndex.js");
 const format = require('pg-format');
 const { mockData } = require("./mockData.js");
 const faker = require("faker");
@@ -25,7 +25,7 @@ let insertThousand = () => {
         }
         let queryStr = `INSERT INTO listings (listing_id, user_id, title, creation_tsz) VALUES %L ;`;
         let theQuery = format(queryStr, valuesArr);
-        client.query(theQuery, (err, data) => {
+        pool.query(theQuery, (err, data) => {
           if (err) {
             console.log("error inserting data");
             throw err;
@@ -54,7 +54,7 @@ let insertThousand = () => {
       }
       let queryStr = `INSERT INTO images (image_url, listing_id, user_id) VALUES %L ;`;
       let theQuery = format(queryStr, nestedParams);
-      client.query(theQuery, (err, data) => {
+      pool.query(theQuery, (err, data) => {
           if (err) {
             throw "error inserting review into db";
           }
@@ -72,7 +72,7 @@ insertThousand();
     for (let j = 0; j < 100; j++){
         let userReviewCount = faker.random.number(19);
         let updateStr = `UPDATE listings SET reviews_count = ${userReviewCount + 1} WHERE user_id = ${mockData[j]["user_id"]}`;
-            client.query(updateStr, (err, data) => {
+            pool.query(updateStr, (err, data) => {
             if (err) {
                 console.log(err);
                 throw "error updating reviews count";
@@ -103,7 +103,7 @@ insertThousand();
             }
             let queryStr = `INSERT INTO feedback (user_id, message, value, reviewerAvatar, reviewerName, reviewDate) VALUES %L ;`;
             let theQuery = format(queryStr, nestedParams);
-            client.query(theQuery, (err, data) => {
+            pool.query(theQuery, (err, data) => {
               if (err) {
               console.log(err);
               throw "error inserting review into db";
