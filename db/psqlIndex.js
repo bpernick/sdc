@@ -7,28 +7,38 @@ const client = new Client({
   password: `student`,
   database: "etsy",
   charset: "utf8mb4",
-  port: 5432,
+  port: 5432
 })
 client.connect()
 
 
 function getReviewsForListing(listing_id, order, callback) {
-  let qryStr = `SELECT 
-  b.*, 
-  a.reviews_count,
-  a.reviews_for_item,
-  c.image_url,
-  a.listing_id,
-  a.title
-FROM listings a 
-LEFT JOIN feedback b 
-  ON a.user_id = b.user_id
-LEFT JOIN (SELECT * FROM images WHERE listing_id = '${listing_id}' LIMIT 1) as c
-  ON a.listing_id = c.listing_id
-WHERE a.listing_id = '${listing_id}'
-ORDER BY b.reviewDate ${order}
-LIMIT 4
-;`;
+  let qryStr = `SELECT * FROM images WHERE listing_id = 1;`
+  
+    // a.reviews_count,
+    // a.reviews_for_item,
+    // a.listing_id,
+    // a.title
+    // FROM listings a 
+    // LEFT JOIN feedback b 
+    // ON a.user_id = b.user_id
+    // ;`
+//   `SELECT 
+//   b.*, 
+//   a.reviews_count,
+//   a.reviews_for_item,
+//   c.image_url,
+//   a.listing_id,
+//   a.title
+// FROM listings a 
+// LEFT JOIN feedback b 
+//   ON a.user_id = b.user_id
+// LEFT JOIN (SELECT * FROM images WHERE listing_id = '${listing_id}' LIMIT 1) as c
+//   ON a.listing_id = c.listing_id
+// WHERE a.listing_id = '${listing_id}'
+// ORDER BY b.reviewDate ${order}
+// LIMIT 4
+// ;`;
 
 client.query(qryStr, (err, data) => {
     err ? callback(err, null) : callback(null, data);
