@@ -17,11 +17,11 @@ client.connect(url, function(err, client) {
 function getReviewsForListing(listing_id, order, callback) {
   client.connect(url, function(err, client) {
     assert.equal(null, err);
-    const db = client.db('etsy_reviews');
+    const db = client.db('etsy');
     const listings = db.collection('listings');
     listings.find({listing_id: listing_id}).toArray((err, results) => {
       if (err){
-        throw err;
+        callback(err);
       }
       callback(null, results);
       client.close();

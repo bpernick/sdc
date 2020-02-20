@@ -2,7 +2,7 @@ const { mockData } = require("./mockData.js");
 const faker = require("faker");
 const client = require('mongodb').MongoClient;
 const assert = require('assert');
-const dbName = 'etsy_reviews';
+const dbName = 'etsy';
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
@@ -34,11 +34,11 @@ client.connect(url, function(err, client) {
             if (!userStorage[userId]){
                 for (let j = 0; j <= revCount; j++){
                     reviews.push({
-                    revMsg : faker.lorem.paragraph(),
-                    revVal : faker.random.number(5),
-                    revAvatar: faker.image.avatar(),
-                    revName : faker.name.firstName() + " " + faker.name.lastName(),
-                    revDate : `${dateStr[1]} ${dateStr[2]}, ${dateStr[3]}`
+                    message : faker.lorem.paragraph(),
+                    value : faker.random.number(5),
+                    reviewerAvatar: faker.image.avatar(),
+                    reviewerName : faker.name.firstName() + " " + faker.name.lastName(),
+                    reviewDate : `${dateStr[1]} ${dateStr[2]}, ${dateStr[3]}`
                     })
                 }
                 userStorage[userId] = reviews;
@@ -54,13 +54,12 @@ client.connect(url, function(err, client) {
             listing_id ++;
             let seed = {
                 listing_id: listing_id,
-                userId: mockData[i].user_id,
+                user_id: mockData[i].user_id,
                 reviews: reviews,
                 imgUrls: imgs,
                 title: faker.commerce.productName(),
-                revCount: revCount + 1,
-                imgCount: imgCount + 1,
-                revsForItem: faker.random.number(5)
+                reviews_count : revCount + 1,
+                reviews_for_item: faker.random.number(5)
             }
             seedArray.push(seed);
         }
