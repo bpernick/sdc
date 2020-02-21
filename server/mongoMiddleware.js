@@ -1,6 +1,5 @@
 
 module.exports.firstReviews = (data) =>{
-console.log(data)
 data = data[0];
 let answer = [];
 for (let i = 0; i < data.reviews.length; i++){
@@ -37,7 +36,6 @@ module.exports.moreReviews = (data) =>{
 }
 
 module.exports.images = (data) => {
-    console.log(data);
     let answer = [];
     data = data[0];
     for (let i = 0; i < data.imgUrls.length; i++){

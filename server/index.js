@@ -2,8 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const PORT = 3000;
-// const db = require("../db/psqlIndex.js");
-const db = require("../db/mongoIndex.js");
+const db = require("../db/psqlIndex.js");
+//const db = require("../db/mongoIndex.js");
 const mongoMiddleware = require('./mongoMiddleware')
 // const db = require("../db/index");
 const path = require("path");
@@ -21,9 +21,8 @@ app.get("/listings", (req, res) => {
       console.log(err)
       return res.status(404).send("listing not found");
     }
-    console.log(data[0])
-    data = mongoMiddleware.firstReviews(data);
-    // data = data.rows;
+    //data = mongoMiddleware.firstReviews(data);
+    data = data.rows;
     res.status(200).send(data);
   });
 });
@@ -36,7 +35,7 @@ app.get("/listings/pictures", (req, res) => {
       return res.status(404).send("error retrieving more data for listing");
     }
     data = mongoMiddleware.images(data);
-    // data = data.rows;
+    data = data.rows;
     res.status(200).send(data);
   })
 });
@@ -49,7 +48,7 @@ app.get("/listings/more", (req, res) => {
       return res.status(404).send("error retrieving more data for listing");
     }
     data = mongoMiddleware.moreReviews(data);
-    // data = data.rows;
+    data = data.rows;
     res.status(200).send(data);
   });
 });
